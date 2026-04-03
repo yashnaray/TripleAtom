@@ -1,6 +1,6 @@
 FROM rust:1-slim AS chef
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    pkg-config libssl-dev ca-certificates \
+    pkg-config libssl-dev ca-certificates perl \
     && rm -rf /var/lib/apt/lists/*
 RUN cargo install cargo-leptos --locked
 WORKDIR /app
