@@ -8,15 +8,15 @@ async fn main() {
     use leptos_axum::{generate_route_list, LeptosRoutes};
     use triple_atom::app::*;
 
-    let conf = get_configuration(None).unwrap();
+    let conf = get_configuration(None).expect("Failed to read configuration");
     let leptos_options = conf.leptos_options;
-    
+
     let addr = match (std::env::var("LEPTOS_SITE_ADDR"), std::env::var("PORT")) {
         (Ok(addr), _) => addr.parse().expect("Invalid LEPTOS_SITE_ADDR"),
         (_, Ok(port)) => format!("0.0.0.0:{}", port).parse().expect("Invalid PORT"),
         _ => leptos_options.site_addr.clone(),
     };
-    
+
     let routes = generate_route_list(App);
 
     let app = Router::new()
@@ -28,10 +28,12 @@ async fn main() {
         .with_state(leptos_options);
 
     log!("listening on http://{}", &addr);
-    let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(&addr)
+        .await
+        .expect("Failed to bind address");
     axum::serve(listener, app.into_make_service())
         .await
-        .unwrap();
+        .expect("Server failed to start");
 }
 
 #[cfg(not(feature = "ssr"))]

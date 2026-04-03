@@ -1,10 +1,10 @@
 FROM rust:1-slim AS chef
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    pkg-config libssl-dev ca-certificates perl make build-essential curl unzip \
+    pkg-config libssl-dev ca-certificates perl make build-essential curl \
     && rm -rf /var/lib/apt/lists/*
-RUN curl -fsSL https://github.com/sass/dart-sass/releases/download/1.77.5/dart-sass-1.77.5-linux-x64.tar.gz | tar -xz -C /usr/local/bin --strip-components=1 dart-sass/sass
-RUN rustup target add wasm32-unknown-unknown
-RUN cargo install wasm-pack --locked
+RUN curl -fsSL https://github.com/sass/dart-sass/releases/download/1.77.5/dart-sass-1.77.5-linux-x64.tar.gz | tar -xz -C /usr/local
+ENV PATH="/usr/local/dart-sass:$PATH"
+RUN rustup target add wasm32-unknown-unknown --toolchain nightly
 RUN cargo install cargo-leptos --locked
 WORKDIR /app
 
