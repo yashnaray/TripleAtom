@@ -1,0 +1,10 @@
+services:
+  triple-atom:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - LEPTOS_SITE_ADDR=0.0.0.0:3000
+    restart: unless-stopped
