@@ -2,6 +2,10 @@
 name = "triple-atom"
 version = "0.1.0"
 edition = "2021"
+description = "A full-stack Rust web application built with Leptos and Axum"
+license = "MIT"
+description = "A full-stack Rust web application built with Leptos and Axum"
+license = "MIT"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
@@ -38,6 +42,18 @@ opt-level = 'z'
 lto = true
 codegen-units = 1
 panic = "abort"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
 
 [package.metadata.leptos]
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
