@@ -1,4 +1,4 @@
-FROM rust:1-slim AS chef
+FROM rust:1-slim AS builder
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pkg-config libssl-dev ca-certificates perl make build-essential curl \
     && rm -rf /var/lib/apt/lists/*
@@ -7,14 +7,7 @@ ENV PATH="/usr/local/dart-sass:$PATH"
 RUN rustup target add wasm32-unknown-unknown --toolchain nightly
 RUN cargo install cargo-leptos --locked
 WORKDIR /app
-
-FROM chef AS planner
 COPY . .
-RUN cargo leptos build --release -vv
-
-FROM chef AS builder
-COPY . .
-COPY --from=planner /app/target/leptos/ /app/target/leptos/
 RUN cargo leptos build --release
 
 FROM debian:bookworm-slim AS runtime
